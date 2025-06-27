@@ -33,7 +33,7 @@ public final class Main {
         ) {
             final BatchScanner batchScanner = new BatchScanner(bufferedReader);
             final ArrayList<LongList> arrayList = new ArrayList<>();
-            final Collection<String> seen = new HashSet<>();
+            final Collection<String> repeating = new HashSet<>();
             LongList longList = new LongList();
 
             StringBuilder stringBuilder = new StringBuilder();
@@ -42,7 +42,7 @@ public final class Main {
                 try {
                     final String str = batchScanner.next();
                     if (str == null) {
-                        if (seen.add(stringBuilder.toString())) {
+                        if (repeating.add(stringBuilder.toString())) {
                             arrayList.add(longList);
                         }
                         batchScanner.openNextLine();
@@ -56,14 +56,14 @@ public final class Main {
                     longList = new LongList();
                 }
             }
-            if (seen.add(stringBuilder.toString())) {
+            if (repeating.add(stringBuilder.toString())) {
                 arrayList.add(longList);
             }
 
-            log.info("Parse ended. Number of rows found: {}. Create union started", seen.size());
+            log.info("Parse ended. Number of rows found: {}. Create union started", repeating.size());
 
             final int n = arrayList.size();
-            final UnionFind uf = new UnionFind(n);
+            final UnionFind unionFind = new UnionFind(n);
             final Map<String, Integer> keyToIndex = new HashMap<>();
 
             for (int i = 0; i < n; i++) {
@@ -72,7 +72,7 @@ public final class Main {
                     if (number != 0) {
                         final String key = j + "#" + number;
                         if (keyToIndex.containsKey(key)) {
-                            uf.union(i, keyToIndex.get(key));
+                            unionFind.union(i, keyToIndex.get(key));
                         } else {
                             keyToIndex.put(key, i);
                         }
@@ -84,7 +84,7 @@ public final class Main {
 
             final Map<Integer, List<LongList>> groups = new HashMap<>();
             for (int i = 0; i < n; i++) {
-                final int root = uf.find(i);
+                final int root = unionFind.find(i);
                 //noinspection unused
                 groups.computeIfAbsent(root, val -> new ArrayList<>())
                         .add(arrayList.get(i));
@@ -92,20 +92,20 @@ public final class Main {
 
             log.info("Grouping by union ended. Number of groups found: {}. Filter by size and sort started", groups.size());
 
-            final List<List<LongList>> multi = new ArrayList<>();
-            for (List<LongList> g : groups.values()) {
-                if (g.size() > 1) {
-                    multi.add(g);
+            final List<List<LongList>> answer = new ArrayList<>();
+            for (List<LongList> group : groups.values()) {
+                if (group.size() > 1) {
+                    answer.add(group);
                 }
             }
-            multi.sort(Comparator.<List<LongList>>comparingInt(List::size).reversed());
+            answer.sort(Comparator.<List<LongList>>comparingInt(List::size).reversed());
 
             log.info("Filter by size and sort ended");
 
-            out.println(multi.size());
-            for (int i = 0; i < multi.size(); i++) {
+            out.println(answer.size());
+            for (int i = 0; i < answer.size(); i++) {
                 out.println("Group " + i);
-                for (LongList longLists : multi.get(i)) {
+                for (LongList longLists : answer.get(i)) {
                     out.println(longLists);
                 }
                 out.println();
