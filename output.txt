@@ -7620,4 +7620,4 @@ Group 1903
 "79208415464";"";"79945237610";"79465365605"
 "79951178981";"79187782460";"79945237610";"";"79876055665";"79820470988"
 
-Program execution time: 6 seconds 415 milliseconds
+Program execution time: 8 seconds 481 milliseconds

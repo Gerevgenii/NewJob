@@ -18,16 +18,19 @@ public final class Main {
     public static void main(String[] args) throws IOException, FileNotFoundException {
         final long timeStart = System.currentTimeMillis();
         log.info("Launching the app with args={}", Arrays.toString(args));
-        if (args.length != 1) {
+        String outputFilePath = "output.txt";
+        if (args.length != 1 && args.length != 2) {
             log.info("Usage: java -Xmx1G -jar build/libs/NewJob-1.0-SNAPSHOT.jar <input-file>");
             System.exit(1);
+        } else if (args.length == 2 && !args[1].isEmpty()) {
+            outputFilePath = args[1];
         }
 
         try (
                 final InputStream fileStream = new FileInputStream(args[0]);
                 final InputStream inputStream = args[0].toLowerCase().endsWith(".gz") ? new GZIPInputStream(fileStream) : fileStream;
                 PrintWriter out = new PrintWriter(
-                        new BufferedWriter(new FileWriter("output.txt"))
+                        new BufferedWriter(new FileWriter(outputFilePath))
                 );
                 final BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream))
         ) {
