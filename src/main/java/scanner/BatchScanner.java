@@ -71,7 +71,7 @@ public class BatchScanner implements Closeable {
         for (int i = 1; i < parts.length; i++) {
             result.append(parts[i]);
             if (i != parts.length - 1)
-                result.append(System.lineSeparator());
+                result.append("\n");
         }
 
         return result;
@@ -89,7 +89,7 @@ public class BatchScanner implements Closeable {
             if (lastPart != null) {
                 currentSB.append(lastPart);
             }
-            currentSB = deleteFirstAndMerge(currentSB.toString().split("\\r?\\n|\\r"));
+            currentSB = new StringBuilder(currentSB.substring(currentSB.indexOf("\n") + 1));
             nextWord = null;
             return;
         }

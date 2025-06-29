@@ -11,6 +11,6 @@ class MainTest {
 
     @Test
     void mainTest() throws IOException, java.io.FileNotFoundException {
-        Main.main(new String[]{"lng.txt", "output.txt"});
+        Assertions.assertDoesNotThrow(() -> Main.main(new String[]{"lng.txt", "outputTestFile1.txt"}));
     }
 }

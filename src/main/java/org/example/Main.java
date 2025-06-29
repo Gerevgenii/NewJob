@@ -8,19 +8,16 @@ import unionFind.UnionFind;
 import java.io.*;
 import java.util.*;
 import java.util.zip.GZIPInputStream;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @SuppressWarnings("DuplicateThrows")
 public final class Main {
-    private static final Logger log = LoggerFactory.getLogger(Main.class);
 
     public static void main(String[] args) throws IOException, FileNotFoundException {
         final long timeStart = System.currentTimeMillis();
-        log.info("Launching the app with args={}", Arrays.toString(args));
+        System.out.println("Launching the app with args={}");
         String outputFilePath = "output.txt";
         if (args.length != 1 && args.length != 2) {
-            log.info("Usage: java -Xmx1G -jar build/libs/NewJob-1.0-SNAPSHOT.jar <input-file>");
+            System.out.println("Usage: java -Xmx1G -jar build/libs/NewJob-1.0-SNAPSHOT.jar <input-file>");
             System.exit(1);
         } else if (args.length == 2 && !args[1].isEmpty()) {
             outputFilePath = args[1];
@@ -40,11 +37,15 @@ public final class Main {
             LongList longList = new LongList();
 
             StringBuilder stringBuilder = new StringBuilder();
-            log.info("Parse started");
+            System.out.println("Parse started");
             while (batchScanner.hasNext()) {
                 try {
                     final String str = batchScanner.next();
                     if (str == null) {
+                        if (longList.size() == 0) {
+                            batchScanner.openNextLine();
+                            continue;
+                        }
                         if (repeating.add(stringBuilder.toString())) {
                             arrayList.add(longList);
                         }
@@ -63,7 +64,7 @@ public final class Main {
                 arrayList.add(longList);
             }
 
-            log.info("Parse ended. Number of rows found: {}. Create union started", repeating.size());
+            System.out.println("Parse ended. Number of rows found: {}. Create union started");
 
             final int n = arrayList.size();
             final UnionFind unionFind = new UnionFind(n);
@@ -83,7 +84,7 @@ public final class Main {
                 }
             }
 
-            log.info("Create union ended. Grouping by union started");
+            System.out.println("Create union ended. Grouping by union started");
 
             final Map<Integer, List<LongList>> groups = new HashMap<>();
             for (int i = 0; i < n; i++) {
@@ -93,7 +94,7 @@ public final class Main {
                         .add(arrayList.get(i));
             }
 
-            log.info("Grouping by union ended. Number of groups found: {}. Filter by size and sort started", groups.size());
+            System.out.println("Grouping by union ended. Number of groups found: {}. Filter by size and sort started");
 
             final List<List<LongList>> answer = new ArrayList<>();
             for (List<LongList> group : groups.values()) {
@@ -103,7 +104,7 @@ public final class Main {
             }
             answer.sort(Comparator.<List<LongList>>comparingInt(List::size).reversed());
 
-            log.info("Filter by size and sort ended");
+            System.out.println("Filter by size and sort ended");
 
             out.println(answer.size());
             for (int i = 0; i < answer.size(); i++) {
@@ -115,7 +116,7 @@ public final class Main {
             }
 
             final long timeDifference = System.currentTimeMillis() - timeStart;
-            log.info("Program execution time: {} seconds {} milliseconds", timeDifference / 1000, timeDifference % 1000);
+            System.out.println("Program execution time: " + timeDifference / 1000 + " seconds " + timeDifference % 1000 + " milliseconds");
             out.println("Program execution time: " + timeDifference / 1000 + " seconds " + timeDifference % 1000 + " milliseconds");
         }
     }

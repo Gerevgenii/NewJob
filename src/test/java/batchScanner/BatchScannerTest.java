@@ -16,8 +16,8 @@ public class BatchScannerTest {
     @Test
     void readWithoutDeleteAnyLine() throws IOException {
         final BufferedReader bufferedReader = new BufferedReader(new StringReader("""
-                "111";"222";"333"\r
-                "444";"555";"666"\r
+                "111";"222";"333"
+                "444";"555";"666"
                 "777";"888";"999"
                 """));
         final BatchScanner batchScanner = new BatchScanner(bufferedReader);
@@ -39,8 +39,8 @@ public class BatchScannerTest {
     @Test
     void readWithDeleteLine() throws IOException {
         final BufferedReader bufferedReader = new BufferedReader(new StringReader("""
-                "111";"222";"333"\r
-                "444;"555";"666"\r
+                "111";"222";"333"
+                "444;"555";"666"
                 "777";"888";"999"
                 """));
         final BatchScanner batchScanner = new BatchScanner(bufferedReader);
@@ -65,8 +65,8 @@ public class BatchScannerTest {
     @Test
     void readWithMissedClosedQuote() throws IOException {
         final BufferedReader bufferedReader = new BufferedReader(new StringReader("""
-                "111";"222";"333"\r
-                "444";"555";"666"\r
+                "111";"222";"333"
+                "444";"555";"666"
                 "777";"888";"999
                 """));
         final BatchScanner batchScanner = new BatchScanner(bufferedReader);
@@ -94,7 +94,7 @@ public class BatchScannerTest {
     @Test
     void readWithThreeQuote() throws IOException {
         final BufferedReader bufferedReader = new BufferedReader(new StringReader("""
-                "111";"222";"333""444";"555";"666"\r
+                "111";"222";"333""444";"555";"666"
                 "777";"888";"999"
                 """));
         final BatchScanner batchScanner = new BatchScanner(bufferedReader);
@@ -121,8 +121,8 @@ public class BatchScannerTest {
     @Test
     void unexpectedPositionOfLineSeparator() throws IOException {
         final BufferedReader bufferedReader = new BufferedReader(new StringReader("""
-                "111";"22\r
-                "222";"333"\r
+                "111";"22
+                "222";"333"
                 "777";"888";"999"
                 """));
         final BatchScanner batchScanner = new BatchScanner(bufferedReader);
@@ -150,26 +150,26 @@ public class BatchScannerTest {
     @Test
     void differentExceptionParseTest() throws IOException {
         final BufferedReader bufferedReader = new BufferedReader(new StringReader("""
-                "1";"111";"222";"333333";"555"\r
-                "2";"2987622"333";"333";"666"\r
-                "3";"222";"333";"333";"777333"\r
-                "4";"222";"333333""333";"888"\r
-                "5";"222222";"333";333";"999"\r
-                "8383"200000741652251"\r
-                "6";"22332";"333";"3333";"555"\r
-                "7";"22332";"333";"3333;"555"\r
-                "8";"22332";"333";"3333";"555"\r
-                "79855053897"83100000580443402";"200000133000191"\r
-                "9";"22112";"333";"333";"22233"\r
-                "79855053897"83100000580443402";"200000133000191"\r
-                "10";"";""\r
-                "";"";""\r
-                "11";";""\r
-                "12";"222";"333"\r
-                "13";"222";""333"\r
-                ""\r
-                "14";;;"15"\r
-                "15"\r
+                "1";"111";"222";"333333";"555"
+                "2";"2987622"333";"333";"666"
+                "3";"222";"333";"333";"777333"
+                "4";"222";"333333""333";"888"
+                "5";"222222";"333";333";"999"
+                "8383"200000741652251"
+                "6";"22332";"333";"3333";"555"
+                "7";"22332";"333";"3333;"555"
+                "8";"22332";"333";"3333";"555"
+                "79855053897"83100000580443402";"200000133000191"
+                "9";"22112";"333";"333";"22233"
+                "79855053897"83100000580443402";"200000133000191"
+                "10";"";""
+                "";"";""
+                "11";";""
+                "12";"222";"333"
+                "13";"222";""333"
+                ""
+                "14";;;"15"
+                "15"
                 "16";"";"12361346";"13461466
                 """));
         // Correct lines: 1, 3, 6, 8, 9, 10, "";"";"", 12, "", 15
