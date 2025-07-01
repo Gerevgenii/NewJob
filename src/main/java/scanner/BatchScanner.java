@@ -197,7 +197,10 @@ public class BatchScanner implements Closeable {
                 currentSB.append(nextPart);
             }
 
-            if ((ch == '\r' || ch == '\n') && count != 2) {
+            if ((ch == '\r' || ch == '\n') && count == 1) {
+                clearInvalidLine();
+                throw new InvalidLineFormatException("Current line must have special format.");
+            } else if ((ch == '\r' || ch == '\n') && count == 0 && !wordSB.isEmpty()) {
                 clearInvalidLine();
                 throw new InvalidLineFormatException("Current line must have special format.");
             } else if (ch == '\r' || ch == '\n') {
@@ -216,12 +219,12 @@ public class BatchScanner implements Closeable {
             wordSB.append(ch);
             ch = currentSB.charAt(index);
         }
-        if (count != 2) {
-            clearInvalidLine();
-            throw new InvalidLineFormatException("Current line must have special format.");
-        } else {
+        if (count == 0 && wordSB.isEmpty() || count == 2) {
             currentSB = new StringBuilder(currentSB.substring(index + 1));
             return wordSB.toString();
+        } else {
+            clearInvalidLine();
+            throw new InvalidLineFormatException("Current line must have special format.");
         }
     }
 }

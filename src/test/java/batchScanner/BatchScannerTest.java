@@ -1,6 +1,6 @@
 package batchScanner;
 
-import longList.LongList;
+import doubleList.DoubleList;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import scanner.BatchScanner;
@@ -21,7 +21,7 @@ public class BatchScannerTest {
                 "777";"888";"999"
                 """));
         final BatchScanner batchScanner = new BatchScanner(bufferedReader);
-        final LongList longList = new LongList();
+        final DoubleList doubleList = new DoubleList();
         for (int i = 1; i < 10; i++) {
             final String str = batchScanner.next();
             if (str == null) {
@@ -29,9 +29,9 @@ public class BatchScannerTest {
                 i--;
                 continue;
             }
-            longList.add(Long.parseLong(str));
+            doubleList.add(Long.parseLong(str));
         }
-        Assertions.assertEquals("\"111\";\"222\";\"333\";\"444\";\"555\";\"666\";\"777\";\"888\";\"999\"", longList.toString());
+        Assertions.assertEquals("\"111.0\";\"222.0\";\"333.0\";\"444.0\";\"555.0\";\"666.0\";\"777.0\";\"888.0\";\"999.0\"", doubleList.toString());
 
         bufferedReader.close();
     }
@@ -44,7 +44,7 @@ public class BatchScannerTest {
                 "777";"888";"999"
                 """));
         final BatchScanner batchScanner = new BatchScanner(bufferedReader);
-        final LongList currentLongList = new LongList();
+        final DoubleList currentDoubleList = new DoubleList();
         for (int i = 1; batchScanner.hasNext(); i++) {
             final String str = batchScanner.next();
             if (str == null) {
@@ -55,9 +55,9 @@ public class BatchScannerTest {
                 }
                 continue;
             }
-            currentLongList.add(Integer.parseInt(str));
+            currentDoubleList.add(Integer.parseInt(str));
         }
-        Assertions.assertEquals("\"111\";\"222\";\"333\";\"777\";\"888\";\"999\"", currentLongList.toString());
+        Assertions.assertEquals("\"111.0\";\"222.0\";\"333.0\";\"777.0\";\"888.0\";\"999.0\"", currentDoubleList.toString());
 
         bufferedReader.close();
     }
@@ -70,7 +70,7 @@ public class BatchScannerTest {
                 "777";"888";"999
                 """));
         final BatchScanner batchScanner = new BatchScanner(bufferedReader);
-        final LongList longList = new LongList();
+        final DoubleList doubleList = new DoubleList();
 
         for (int i = 1; batchScanner.hasNext(); i++) {
             final String str;
@@ -85,9 +85,9 @@ public class BatchScannerTest {
                 i--;
                 continue;
             }
-            longList.add(Integer.parseInt(str));
+            doubleList.add(Integer.parseInt(str));
         }
-        Assertions.assertEquals("\"111\";\"222\";\"333\";\"444\";\"555\";\"666\";\"777\"", longList.toString());
+        Assertions.assertEquals("\"111.0\";\"222.0\";\"333.0\";\"444.0\";\"555.0\";\"666.0\";\"777.0\"", doubleList.toString());
         bufferedReader.close();
     }
 
@@ -98,7 +98,7 @@ public class BatchScannerTest {
                 "777";"888";"999"
                 """));
         final BatchScanner batchScanner = new BatchScanner(bufferedReader);
-        final LongList longList = new LongList();
+        final DoubleList doubleList = new DoubleList();
         for (int i = 1; batchScanner.hasNext(); i++) {
             final String str;
             if (i == 2) {
@@ -112,9 +112,9 @@ public class BatchScannerTest {
                 i--;
                 continue;
             }
-            longList.add(Integer.parseInt(str));
+            doubleList.add(Integer.parseInt(str));
         }
-        Assertions.assertEquals("\"111\";\"777\";\"888\";\"999\"", longList.toString());
+        Assertions.assertEquals("\"111.0\";\"777.0\";\"888.0\";\"999.0\"", doubleList.toString());
         bufferedReader.close();
     }
 
@@ -126,7 +126,7 @@ public class BatchScannerTest {
                 "777";"888";"999"
                 """));
         final BatchScanner batchScanner = new BatchScanner(bufferedReader);
-        final LongList longList = new LongList();
+        final DoubleList doubleList = new DoubleList();
         for (int i = 1; batchScanner.hasNext(); i++) {
             final String str;
             if (i <= 1) {
@@ -140,9 +140,9 @@ public class BatchScannerTest {
                 i--;
                 continue;
             }
-            longList.add(Integer.parseInt(str));
+            doubleList.add(Integer.parseInt(str));
         }
-        Assertions.assertEquals("\"222\";\"333\";\"777\";\"888\";\"999\"", longList.toString());
+        Assertions.assertEquals("\"222.0\";\"333.0\";\"777.0\";\"888.0\";\"999.0\"", doubleList.toString());
         bufferedReader.close();
     }
 
@@ -150,6 +150,7 @@ public class BatchScannerTest {
     @Test
     void differentExceptionParseTest() throws IOException {
         final BufferedReader bufferedReader = new BufferedReader(new StringReader("""
+                "0";;;"1";
                 "1";"111";"222";"333333";"555"
                 "2";"2987622"333";"333";"666"
                 "3";"222";"333";"333";"777333"
@@ -172,32 +173,32 @@ public class BatchScannerTest {
                 "15"
                 "16";"";"12361346";"13461466
                 """));
-        // Correct lines: 1, 3, 6, 8, 9, 10, "";"";"", 12, "", 15
+        // Correct lines: 0, 1, 3, 6, 8, 9, 10, "";"";"", 12, "", 14, 15
 
         final BatchScanner batchScanner = new BatchScanner(bufferedReader);
-        LongList longList = new LongList();
-        final List<LongList> arrayList = new ArrayList<>();
+        DoubleList doubleList = new DoubleList();
+        final List<DoubleList> arrayList = new ArrayList<>();
         while (batchScanner.hasNext()) {
             try {
                 final String str = batchScanner.next();
 
                 if (str == null) {
-                    if (longList.size() != 0) {
-                        arrayList.add(longList);
+                    if (doubleList.size() != 0) {
+                        arrayList.add(doubleList);
                     }
                     batchScanner.openNextLine();
-                    longList = new LongList();
+                    doubleList = new DoubleList();
                     continue;
                 }
-                longList.add(str.isEmpty() ? 0 : Long.parseLong(str));
+                doubleList.add(str.isEmpty() ? 0 : Long.parseLong(str));
             } catch (InvalidLineFormatException e) {
-                longList = new LongList();
+                doubleList = new DoubleList();
             }
         }
-        if (longList.size() != 0) {
-            arrayList.add(longList);
+        if (doubleList.size() != 0) {
+            arrayList.add(doubleList);
         }
-        for (LongList list : arrayList) {
+        for (DoubleList list : arrayList) {
             System.out.println(list);
         }
 
