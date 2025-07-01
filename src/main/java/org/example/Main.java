@@ -115,7 +115,7 @@ public final class Main {
             }
 
             final long timeDifference = System.currentTimeMillis() - timeStart;
-            System.out.println("Program execution time: " + timeDifference / 1000 + " seconds " + timeDifference % 1000 + " milliseconds");
+            System.err.println("Program execution time: " + timeDifference / 1000 + " seconds " + timeDifference % 1000 + " milliseconds");
             out.println("Program execution time: " + timeDifference / 1000 + " seconds " + timeDifference % 1000 + " milliseconds");
         }
     }
